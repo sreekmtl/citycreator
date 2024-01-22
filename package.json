@@ -1,0 +1,23 @@
+{
+  "name": "cityCreator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "css-loader": "^6.9.1",
+    "json-loader": "^0.5.7",
+    "webpack": "^5.89.0",
+    "webpack-cli": "^5.1.4"
+  },
+  "dependencies": {
+    "geotiff": "^2.1.1",
+    "suncalc": "^1.9.0",
+    "three": "^0.160.0"
+  }
+}

@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkcityCreator=self.webpackChunkcityCreator||[]).push([[522],{522:(e,r,t)=>{t.r(r),t.d(r,{default:()=>s});var a=t(885),c=t(737);class s extends c.Z{decodeBlock(e){return(0,a.rr)(new Uint8Array(e)).buffer}}}}]);
