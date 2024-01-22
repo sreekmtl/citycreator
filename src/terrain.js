@@ -2,10 +2,8 @@ import * as THREE from 'three';
 import * as GEOTIFF from 'geotiff';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { loadBuildings } from './buildingLoader';
-import { loadClouds } from './clouds';
 import { createBuildings } from './buildingCreator';
 import { getLightPosition, getSunPosition } from './sunpos';
-//import '../styles/style.css';
 
 
 //CREATING DOM ELEMENT FOR RENDERING THE SCENE
@@ -20,7 +18,7 @@ function renderScene(terrainMesh,origin, midPoint, pixSize, data,imgWidth,imgHei
     const scene= new THREE.Scene();
     var light= new THREE.PointLight(0xffffff,3e7,1e4);
     light.castShadow=true;
-    light.position.set(0,0,3000);
+    light.position.set(0,0,3500);
     scene.add(light);
 
     const displayText= document.getElementById("displayText");
@@ -43,7 +41,7 @@ function renderScene(terrainMesh,origin, midPoint, pixSize, data,imgWidth,imgHei
     
 
     var camera= new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight, 0.1, 10000);
-    camera.position.set(1000,1000,1000);
+    camera.position.set(0,-800,1500);
     camera.lookAt(scene.position);
 
     const renderer= new THREE.WebGLRenderer({
@@ -56,8 +54,8 @@ function renderScene(terrainMesh,origin, midPoint, pixSize, data,imgWidth,imgHei
     renderer.setClearColor(0xffffff);
     document.getElementById('viz').appendChild(renderer.domElement);
 
-    var axesHelper = new THREE.AxesHelper(1000); // The parameter is the size of the axes
-    scene.add(axesHelper);
+    //var axesHelper = new THREE.AxesHelper(1000); // The parameter is the size of the axes
+    //scene.add(axesHelper);
     //loadBuildings(scene,terrainMesh);
     //loadClouds(scene);
     createBuildings(scene, midPoint,pixSize,origin, data,imgWidth,imgHeight);
@@ -106,8 +104,6 @@ function createTerrain(imgWidth, imgHeight, origin, pixSize, data){
     })
 
     const terrainMesh= new THREE.Mesh(planeGeometry, material);
-    //terrainMesh.position.y=-1015;
-    //terrainMesh.position.x=845
     terrainMesh.receiveShadow=true;
 
     const midPoint= [(Math.floor(imgWidth/2)*pixSize[0]+origin[0]),(Math.floor(imgHeight/2)*pixSize[1]+origin[1]) ];
