@@ -101,7 +101,7 @@ function createTerrain(imgWidth, imgHeight, origin, pixSize, data){
     const texture= new THREE.TextureLoader().load('./assets/ddns2utm43.png');
     const material= new THREE.MeshLambertMaterial({
         wireframe:false,
-        side:THREE.DoubleSide,
+        
         map: texture,
     })
 

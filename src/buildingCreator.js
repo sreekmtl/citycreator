@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 
-const buildingData= require('../dist/assets/buildings.json');
+const buildingData= require('../assets/buildings.json');
 console.log(buildingData);
 
 function createBuildings(scene, midPoint, pixSize, origin,data,imgWidth,imgHeight){
@@ -46,7 +46,7 @@ function createBuildings(scene, midPoint, pixSize, origin,data,imgWidth,imgHeigh
         const mesh1= new THREE.Mesh(gmtry,material);
         mesh1.castShadow=true;
         mesh1.receiveShadow=true;
-        mesh1.position.setZ(baseHeight);
+        mesh1.position.setZ(baseHeight+2.5);
 
         scene.add(mesh1);
 
@@ -89,7 +89,7 @@ function fitToGround(basePoint,pixPos,scene,origin,pixSize,data,imgWidth,imgHeig
         //console.log(ht);
 
 
-        return ht/10.4;
+        return (ht/10.4);
 
     }
 

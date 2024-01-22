@@ -1,7 +1,15 @@
-.header{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px;
-    background-color: #000000;
+input[type="range"] {
+    width:400px;
+  }
+
+  h1{
+    color: bisque;
+    font-family:monospace;
+    font-size:xx-large;
+}
+
+p1{
+    color: #ffffff;
+    font-family: monospace;
+    font-size: large;
 }
