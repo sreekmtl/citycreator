@@ -25,7 +25,7 @@ function renderScene(terrainMesh,origin, midPoint, pixSize, data,imgWidth,imgHei
     const sunSlider= document.getElementById('sunslider');
     sunSlider.addEventListener("input", (event)=>{
 
-        var content= `January 20, 2023 ${event.target.value}:00:00 GMT+5:30`;
+        var content= `January 23, 2023 ${event.target.value}:00:00 GMT+5:30`;
         displayText.textContent= content;
         var lp= getLightPosition(light,content);
         light.position.set(lp.x,lp.y,lp.z); //default light position
@@ -56,8 +56,6 @@ function renderScene(terrainMesh,origin, midPoint, pixSize, data,imgWidth,imgHei
 
     //var axesHelper = new THREE.AxesHelper(1000); // The parameter is the size of the axes
     //scene.add(axesHelper);
-    //loadBuildings(scene,terrainMesh);
-    //loadClouds(scene);
     createBuildings(scene, midPoint,pixSize,origin, data,imgWidth,imgHeight);
 
     // Add camera controls
@@ -67,6 +65,8 @@ function renderScene(terrainMesh,origin, midPoint, pixSize, data,imgWidth,imgHei
     //controls.maxDistance=40000;
     controls.enableDamping=true;
     controls.dampingFactor=0.05;
+    controls.zoomSpeed=2;
+    controls.rotateSpeed=1.5;
     controls.mouseButtons = {
         LEFT: THREE.MOUSE.ROTATE,
         MIDDLE: THREE.MOUSE.DOLLY,
@@ -84,7 +84,7 @@ function renderScene(terrainMesh,origin, midPoint, pixSize, data,imgWidth,imgHei
 
 function createTerrain(imgWidth, imgHeight, origin, pixSize, data){
 
-    let planeGeometry= new THREE.PlaneGeometry((imgWidth*pixSize[0]/10), (imgHeight*pixSize[0]/10.4), imgWidth-1, imgHeight-1);
+    let planeGeometry= new THREE.PlaneGeometry((imgWidth), (imgHeight), imgWidth-1, imgHeight-1);
     
     const arr1= new Array(planeGeometry.attributes.position.count);
     const arr= arr1.fill(1);
@@ -119,12 +119,12 @@ async function loadDEM(){
     const image= await tiff.getImage();
     const origin= image.getOrigin();
     const pixSize= image.getResolution();
-    console.log(pixSize);
-    console.log(image.getOrigin());
+    //console.log(pixSize);
+    //console.log(image.getOrigin());
     const imgWidth= image.getWidth();
     const imgHeight= image.getHeight();
     const data= await image.readRasters();
-    console.log(data);
+    //console.log(data);
 
     createTerrain(imgWidth, imgHeight, origin, pixSize, data);
 

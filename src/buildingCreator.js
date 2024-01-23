@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 
 const buildingData= require('../assets/buildings.json');
-console.log(buildingData);
+//console.log(buildingData);
 
 function createBuildings(scene, midPoint, pixSize, origin,data,imgWidth,imgHeight){
 

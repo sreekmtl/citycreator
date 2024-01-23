@@ -19,7 +19,7 @@ function getLightPosition(light, dateUTC){
 
     var params= getSunPosition(dateUTC);
     var lightPosition= light.position.set(0,3000,0);
-    console.log(params, lightPosition);
+    //console.log(params, lightPosition);
 
     //to find azimuth, multiplying horizon position of sun vector (def north up) with 2*2 rotation matrix
 
@@ -33,11 +33,11 @@ function getLightPosition(light, dateUTC){
 
     var alt_matrix= new THREE.Matrix4().makeRotationX((params.solarAltitue)*Math.PI/180);
     newAlt.applyMatrix4(alt_matrix);
-    console.log(newAlt);
+    //console.log(newAlt);
 
     var azim_matrix= new THREE.Matrix4().makeRotationZ((360-params.correctedAzimuth)*Math.PI/180);
     var newPos= newAlt.applyMatrix4(azim_matrix);
-    console.log(newPos, "newpos");
+    //console.log(newPos, "newpos");
 
   return newPos;
 
