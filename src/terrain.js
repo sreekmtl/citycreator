@@ -13,20 +13,46 @@ divElement.id='viz';
 document.body.appendChild(divElement);
 
 
-function renderScene(terrainMesh,origin, midPoint, pixSize, data,imgWidth,imgHeight){
+function renderScene(terrainMesh,midPoint,dem){
 
     const scene= new THREE.Scene();
     var light= new THREE.PointLight(0xffffff,3e7,1e4);
+    //var light= new THREE.DirectionalLight(0xffffff);
     light.castShadow=true;
     light.position.set(0,0,3500);
     scene.add(light);
 
+    
+
     const displayText= document.getElementById("displayText");
     const sunSlider= document.getElementById('sunslider');
+    displayText.value="January 23, 2023 12:00:00 GMT+5:30";
+    const dateBtn= document.getElementById("dateSubmit")
+
+    dateBtn.addEventListener("click",(event)=>{
+        var content= displayText.value;
+        var lp= getLightPosition(light,content);
+        light.position.set(lp.x,lp.y,lp.z); //default light position
+        light.updateMatrixWorld();
+        
+        var timeComp= content.split(' ')[3];
+        var hrComp= timeComp.split(':')[0];
+        sunSlider.value=hrComp;
+
+
+    });
+    
     sunSlider.addEventListener("input", (event)=>{
 
-        var content= `January 23, 2023 ${event.target.value}:00:00 GMT+5:30`;
-        displayText.textContent= content;
+        //var content= `January 23, 2023 ${event.target.value}:00:00 GMT+5:30`;
+        var content= displayText.value;
+        var txtComp= content.split(' ');
+        var hot= txtComp[3].split(':');
+
+        hot= event.target.value;
+
+
+        displayText.value= txtComp[0]+" "+txtComp[1]+" "+txtComp[2]+" "+hot+":00:00"+" "+txtComp[4];
         var lp= getLightPosition(light,content);
         light.position.set(lp.x,lp.y,lp.z); //default light position
         light.updateMatrixWorld();
@@ -41,7 +67,7 @@ function renderScene(terrainMesh,origin, midPoint, pixSize, data,imgWidth,imgHei
     
 
     var camera= new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight, 0.1, 10000);
-    camera.position.set(0,-800,1500);
+    camera.position.set(0,-500,900);
     camera.lookAt(scene.position);
 
     const renderer= new THREE.WebGLRenderer({
@@ -56,7 +82,7 @@ function renderScene(terrainMesh,origin, midPoint, pixSize, data,imgWidth,imgHei
 
     //var axesHelper = new THREE.AxesHelper(1000); // The parameter is the size of the axes
     //scene.add(axesHelper);
-    createBuildings(scene, midPoint,pixSize,origin, data,imgWidth,imgHeight);
+    createBuildings(scene, midPoint,dem);
 
     // Add camera controls
     var controls= new OrbitControls(camera, renderer.domElement);
@@ -82,15 +108,15 @@ function renderScene(terrainMesh,origin, midPoint, pixSize, data,imgWidth,imgHei
 
 }
 
-function createTerrain(imgWidth, imgHeight, origin, pixSize, data){
+function createTerrain(dem){
 
-    let planeGeometry= new THREE.PlaneGeometry((imgWidth), (imgHeight), imgWidth-1, imgHeight-1);
+    let planeGeometry= new THREE.PlaneGeometry(dem.width, dem.height, dem.width-1, dem.height-1);
     
     const arr1= new Array(planeGeometry.attributes.position.count);
     const arr= arr1.fill(1);
-    console.log(data[0][1]);
+    
     arr.forEach((a,index)=>{
-        planeGeometry.attributes.position.setZ(index, (data[0][index]/10*1));
+        planeGeometry.attributes.position.setZ(index, (dem.data[0][index]/10*1));
     
     });
 
@@ -106,30 +132,12 @@ function createTerrain(imgWidth, imgHeight, origin, pixSize, data){
     const terrainMesh= new THREE.Mesh(planeGeometry, material);
     terrainMesh.receiveShadow=true;
 
-    const midPoint= [(Math.floor(imgWidth/2)*pixSize[0]+origin[0]),(Math.floor(imgHeight/2)*pixSize[1]+origin[1]) ];
+    const midPoint= [(Math.floor(dem.width/2)*dem.pixSize[0]+dem.origin[0]),(Math.floor(dem.height/2)*dem.pixSize[1]+dem.origin[1]) ];
     console.log("midpoint", midPoint);
 
-    renderScene(terrainMesh,origin, midPoint, pixSize, data,imgWidth,imgHeight);
+    renderScene(terrainMesh,midPoint,dem);
 
 
 }
 
-async function loadDEM(){
-    const tiff= await GEOTIFF.fromUrl('./assets/ddn_utm43n.tif');
-    const image= await tiff.getImage();
-    const origin= image.getOrigin();
-    const pixSize= image.getResolution();
-    //console.log(pixSize);
-    //console.log(image.getOrigin());
-    const imgWidth= image.getWidth();
-    const imgHeight= image.getHeight();
-    const data= await image.readRasters();
-    //console.log(data);
-
-    createTerrain(imgWidth, imgHeight, origin, pixSize, data);
-
-}
-
-//move this dem loading to new js file so variables can be accessed easilty w/o copying into memory
-
-loadDEM();
+export {createTerrain};

@@ -3,7 +3,7 @@ import * as THREE from 'three';
 const buildingData= require('../assets/buildings.json');
 //console.log(buildingData);
 
-function createBuildings(scene, midPoint, pixSize, origin,data,imgWidth,imgHeight){
+function createBuildings(scene, midPoint, dem){
 
     const extrudeSettings = {
         steps: 10,
@@ -28,7 +28,7 @@ function createBuildings(scene, midPoint, pixSize, origin,data,imgWidth,imgHeigh
                 var lt= ia[k][0];
                 var lg= ia[k][1];
 
-                var point= new THREE.Vector2((lt-midPoint[0])/pixSize[0],(lg-midPoint[1])/pixSize[0]);
+                var point= new THREE.Vector2((lt-midPoint[0])/dem.pixSize[0],(lg-midPoint[1])/dem.pixSize[0]);
                 coordinateList.push(point);
 
 
@@ -36,17 +36,17 @@ function createBuildings(scene, midPoint, pixSize, origin,data,imgWidth,imgHeigh
 
         }
 
-        var pixPos= [(coordinateList[0].x*pixSize[0])+midPoint[0], (coordinateList[0].y*pixSize[0])+midPoint[1] ];
+        var pixPos= [(coordinateList[0].x*dem.pixSize[0])+midPoint[0], (coordinateList[0].y*dem.pixSize[0])+midPoint[1] ];
 
         var shp= new THREE.Shape(coordinateList);
-        var baseHeight= fitToGround(coordinateList[0],pixPos, scene,origin,pixSize,data,imgWidth,imgHeight, false);
+        var baseHeight= fitToGround(coordinateList[0],pixPos, scene,dem, false);
         
         const gmtry= new THREE.ExtrudeGeometry(shp,extrudeSettings);
-        const material= new THREE.MeshPhongMaterial({ color: "red" });
+        const material= new THREE.MeshPhongMaterial({ color: '#f7f7f0' });
         const mesh1= new THREE.Mesh(gmtry,material);
         mesh1.castShadow=true;
         mesh1.receiveShadow=true;
-        mesh1.position.setZ(baseHeight+2.5);
+        mesh1.position.setZ(baseHeight+(extrudeSettings.depth/2));
 
         scene.add(mesh1);
 
@@ -56,7 +56,7 @@ function createBuildings(scene, midPoint, pixSize, origin,data,imgWidth,imgHeigh
 
 }
 
-function fitToGround(basePoint,pixPos,scene,origin,pixSize,data,imgWidth,imgHeight, rc){
+function fitToGround(basePoint,pixPos,scene,dem, rc){
 
     if (rc===true){
         var rc=  new THREE.Raycaster();
@@ -76,20 +76,20 @@ function fitToGround(basePoint,pixPos,scene,origin,pixSize,data,imgWidth,imgHeig
         //console.log(pixPos,"pixpos");
         // finding pix value from position and that pix value is height which we return from here...
 
-        var lat_offset= pixPos[0]-origin[0];
-        var lng_offset= pixPos[1]-origin[1];
+        var lat_offset= pixPos[0]-dem.origin[0];
+        var lng_offset= pixPos[1]-dem.origin[1];
 
-        var x_pos= Math.floor(lat_offset/pixSize[0]);
-        var y_pos= Math.floor(lng_offset/pixSize[1]);
+        var x_pos= Math.floor(lat_offset/dem.pixSize[0]);
+        var y_pos= Math.floor(lng_offset/dem.pixSize[1]);
 
         //pix pos is (width*y_pos)+x_pos
 
-        var ht= data[0][(imgWidth*y_pos)+x_pos];
+        var ht= dem.data[0][(dem.width*y_pos)+x_pos];
 
         //console.log(ht);
 
 
-        return (ht/10.4);
+        return (ht/dem.pixSize[0]);
 
     }
 

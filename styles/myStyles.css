@@ -9,7 +9,26 @@ input[type="range"] {
 }
 
 p1{
-    color: #ffffff;
+    color: #000000;
     font-family: monospace;
     font-size: large;
 }
+
+label{
+  color: #000000;
+    font-family: monospace;
+    font-size: large;
+}
+
+input[type="text"] {
+  width:300px;
+  color: #000000;
+  font-family: monospace;
+  font-size: large;
+}
+
+button{
+  font-family:monospace;
+  font-size: large;
+}
+
