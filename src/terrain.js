@@ -1,5 +1,4 @@
 import * as THREE from 'three';
-import * as GEOTIFF from 'geotiff';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { loadBuildings } from './buildingLoader';
 import { createBuildings } from './buildingCreator';

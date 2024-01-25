@@ -42,7 +42,7 @@ function createBuildings(scene, midPoint, dem){
         var baseHeight= fitToGround(coordinateList[0],pixPos, scene,dem, false);
         
         const gmtry= new THREE.ExtrudeGeometry(shp,extrudeSettings);
-        const material= new THREE.MeshPhongMaterial({ color: '#f7f7f0' });
+        const material= new THREE.MeshPhongMaterial({ color: "red" });
         const mesh1= new THREE.Mesh(gmtry,material);
         mesh1.castShadow=true;
         mesh1.receiveShadow=true;
